@@ -29,13 +29,13 @@ dependencies:
   bloc_concurrency: ^0.2.3
   flutter_rating_bar: ^4.0.1
   percent_indicator: ^4.2.3
-  syncfusion_flutter_sliders: ^23.1.45
-  syncfusion_flutter_core: ^23.1.45
+  syncfusion_flutter_sliders: ^20.4.50
+  syncfusion_flutter_core: ^20.4.50
   pinput: ^3.0.1
   dartz: ^0.10.1
   intl: ^0.18.0
   google_maps_flutter: ^2.5.2
-  flutter_stripe: ^10.0.0
+  flutter_stripe: ^9.0.0
   flutter_dotenv: ^5.1.0
   http_parser: any
   firebase_core: ^2.24.2
@@ -44,7 +44,7 @@ dependencies:
   flutter_local_notifications: ^16.3.0
   socket_io_client: ^2.0.3+1
   shimmer: ^3.0.0
-  permission_handler: ^11.1.0
+  permission_handler: ^11.0.1
 
 dev_dependencies:
   flutter_test:

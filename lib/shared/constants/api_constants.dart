@@ -1,6 +1,6 @@
 final class ApiConstants {
   //! Core
-  static const String apiUrl = 'YOUR_API_URL';
+  static const String apiUrl = 'http://192.168.1.110:3000'; // تعديل هذا إلى URL الخاص بك
   static const String baseUrl = '$apiUrl/api';
   static const String mapsBaseUrl = 'https://maps.googleapis.com/maps/api';
   static const String unAuthenticatedConsumer = 'unAuthenticatedConsumer';
@@ -38,11 +38,13 @@ final class ApiConstants {
   //! Collection Endpoints
   static const String collectionsListEndPoint = '/collection';
   static String getCollectionItemsEndPoint({required String collectionId}) => '/collection/$collectionId';
+  
   //! User EndPoints
   static const String userDataEndPoint = '/user/me';
   static const String editUserDataEndPoint = '/user/me/edit';
   static const String updateUserProfileEndPoint = '/user/profile-image';
   static String getUserProfilePicture({required String path}) => '$baseUrl/u/profile/$path';
+
   //! Cart
   static String cartEndPoint = '/user/cart';
   static String paymentIntentEndPoint = '/order/create-payment-intent';
@@ -59,6 +61,7 @@ final class ApiConstants {
   static String getChatMessages({required String chatId}) => '/chat/$chatId/messages';
   static String sendNewMessage({required String chatId}) => '/chat/$chatId/new-message';
 }
+
 enum ApiCallStatus{
   success('success'),
   error('error');
