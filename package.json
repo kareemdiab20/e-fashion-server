@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/Bit-Camp-IO/E-Fashion_Flutter#readme",
   "dependencies": {
+    "dir2json": "^0.0.2",
     "express": "^5.1.0",
     "firebase-admin": "^13.2.0"
   }
