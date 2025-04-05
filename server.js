@@ -1,7 +1,18 @@
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 3000;
+const firebaseAdmin = require('./api/index'); // استيراد الكود من index.js
 
+// باقي الكود في server.js مثل استماع السيرفر
+const admin = require('firebase-admin');
+const serviceAccount = require('./path-to-your-service-account-key.json');
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: 'https://your-project-id.firebaseio.com'
+});
+
+const db = admin.firestore();
 // هذه السطر يتيح للسيرفر التعامل مع JSON في الطلبات
 app.use(express.json()); 
 
