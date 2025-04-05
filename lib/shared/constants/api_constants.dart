@@ -1,6 +1,6 @@
 final class ApiConstants {
   //! Core
-  static const String apiUrl = 'https://e-fashion-server.onrender.com';
+  static const String apiUrl = 'https://e-fashion-server.vercel.app';
   static const String baseUrl = '$apiUrl/api';
   static const String mapsBaseUrl = 'https://maps.googleapis.com/maps/api';
   static const String unAuthenticatedConsumer = 'unAuthenticatedConsumer';
