@@ -6,6 +6,10 @@ const firebaseAdmin = require('./api/index'); // استيراد الكود من 
 const admin = require('firebase-admin');
 
 const serviceAccount = JSON.parse(process.env.FIREBASE_CONFIG);
+const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+if (!emailRegex.test(email)) {
+  return res.status(400).json({ message: "Invalid email address in server.js" });
+}
 
 if (!admin.apps.length) {
   admin.initializeApp({
