@@ -20,10 +20,12 @@ class AuthRepositoryImpl extends AuthRepository {
     required String password,
   }) async {
     try {
+      print('Attempting login with email: $email');
       final result = await _authRemoteDataSource.userLogin(
         email: email,
         password: password,
       );
+      print('Login successful, result: $result');
       _authLocalDataSource.addAuthTokens(authTokensModel: result);
       return right(result.toAuthTokens());
     } on ServerException catch (exception) {
@@ -45,12 +47,14 @@ class AuthRepositoryImpl extends AuthRepository {
     required String phoneNumber,
   }) async {
     try {
+      print('Attempting sign-up with email: $email');
       final result = await _authRemoteDataSource.userSignUp(
         fullName: fullName,
         email: email,
         password: password,
         phoneNumber: phoneNumber,
       );
+      print('Sign-up successful, result: $result');
       _authLocalDataSource.addAuthTokens(authTokensModel: result);
       return right(result.toAuthTokens());
     } on ServerException catch (exception) {
@@ -66,11 +70,13 @@ class AuthRepositoryImpl extends AuthRepository {
 
   @override
   Future<void> deleteTokens() {
+    print('Deleting tokens');
     return _authLocalDataSource.deleteAuthTokens();
   }
 
   @override
   bool checkIfTokensExist() {
+    print('Checking if tokens exist');
     return _authLocalDataSource.checkIfTokensExist();
   }
 
@@ -78,22 +84,20 @@ class AuthRepositoryImpl extends AuthRepository {
   Future<Either<Failure,String>> getAccessToken() async {
     try {
       final accessToken = _authLocalDataSource.getAccessToken();
+      print('Access token retrieved: $accessToken');
       if (accessToken.isNotEmpty) {
         return right(accessToken);
       } else {
-        try {
-          final refreshToken = await _authLocalDataSource.getRefreshToken();
-          final newAccessToken = await _authRemoteDataSource.updateAccessToken(refreshToken: refreshToken);
-          await _authLocalDataSource.updateAccessToken(accessToken: newAccessToken);
-          return right(newAccessToken);
-        } on ServerException catch (exception) {
-          print('ServerException occurred while getting access token: ${exception.message}');
-          return left(ApiFailure(exception.message!));
-        }
+        print('Access token is empty, attempting to refresh token');
+        final refreshToken = await _authLocalDataSource.getRefreshToken();
+        print('Refresh token retrieved: $refreshToken');
+        final newAccessToken = await _authRemoteDataSource.updateAccessToken(refreshToken: refreshToken);
+        await _authLocalDataSource.updateAccessToken(accessToken: newAccessToken);
+        return right(newAccessToken);
       }
-    } on TokensException catch (exception) {
-      print('TokensException occurred: ${exception.message}');
-      return left(CacheFailure(exception.message!));
+    } on ServerException catch (exception) {
+      print('ServerException occurred while getting access token: ${exception.message}');
+      return left(ApiFailure(exception.message!));
     } catch (e) {
       print('Unexpected error occurred while getting access token: $e');
       return left(ApiFailure(e.toString()));
@@ -103,7 +107,9 @@ class AuthRepositoryImpl extends AuthRepository {
   @override
   Future<Either<Failure, String>> forgetPassword({required String email}) async {
     try {
+      print('Attempting to reset password for email: $email');
       final forgetPasswordRequest = await _authRemoteDataSource.forgetPassword(email: email);
+      print('Password reset request successful, response: $forgetPasswordRequest');
       return right(forgetPasswordRequest);
     } on ServerException catch (exception) {
       print('ServerException occurred during forget password: ${exception.message}');
@@ -117,7 +123,9 @@ class AuthRepositoryImpl extends AuthRepository {
   @override
   Future<Either<Failure, void>> verifyOtp({required String email, required String otpCode}) async {
     try {
+      print('Attempting OTP verification for email: $email with OTP: $otpCode');
       final verifyOtpRequest = await _authRemoteDataSource.verifyOtp(email: email, otpCode: otpCode);
+      print('OTP verification successful, response: $verifyOtpRequest');
       return right(verifyOtpRequest);
     } on ServerException catch (exception) {
       print('ServerException occurred during OTP verification: ${exception.message}');
@@ -131,7 +139,9 @@ class AuthRepositoryImpl extends AuthRepository {
   @override
   Future<Either<Failure, String>> resetPassword({required String email, required String otpCode, required newPassword}) async {
     try {
+      print('Attempting to reset password for email: $email with OTP: $otpCode');
       final resetPasswordRequest = await _authRemoteDataSource.resetPassword(email: email, otpCode: otpCode, newPassword: newPassword);
+      print('Password reset successful, response: $resetPasswordRequest');
       return right(resetPasswordRequest);
     } on ServerException catch (exception) {
       print('ServerException occurred during reset password: ${exception.message}');
@@ -150,12 +160,14 @@ class AuthRepositoryImpl extends AuthRepository {
     required String confirmNewPassword,
   }) async {
     try {
+      print('Attempting to change password for user with access token: $userAccessToken');
       final changePasswordRequest = await _authRemoteDataSource.changePassword(
         userAccessToken: userAccessToken,
         oldPassword: oldPassword,
         newPassword: newPassword,
         confirmNewPassword: confirmNewPassword,
       );
+      print('Password change successful, response: $changePasswordRequest');
       return right(changePasswordRequest);
     } on ServerException catch (exception) {
       print('ServerException occurred during change password: ${exception.message}');
